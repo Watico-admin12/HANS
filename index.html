@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiawso College Meal Plan Survey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #2E8B57 0%, #3CB371 50%, #20B2AA 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.1"/><circle cx="80" cy="80" r="2" fill="white" opacity="0.1"/><circle cx="40" cy="60" r="1" fill="white" opacity="0.1"/></svg>');
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 50px;
+        }
+
+        .intro-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            border-left: 5px solid #2E8B57;
+        }
+
+        .intro-section h2 {
+            color: #1e3c72;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .intro-section p {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .voter-id-section {
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            border: 2px solid #e9ecef;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .voter-id-section h3 {
+            color: #2E8B57;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .voter-id-section input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        .voter-id-section input:focus {
+            outline: none;
+            border-color: #2E8B57;
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+        }
+
+        .verify-btn {
+            background: linear-gradient(135deg, #2E8B57, #3CB371);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(46, 139, 87, 0.3);
+        }
+
+        .verify-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(46, 139, 87, 0.4);
+        }
+
+        .meal-plan {
+            background: white;
+            border: 3px solid #e9ecef;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .meal-plan::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(46, 139, 87, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .meal-plan:hover::before {
+            left: 100%;
+        }
+
+        .meal-plan:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-color: #2E8B57;
+        }
+
+        .meal-plan.selected {
+            border-color: #2E8B57;
+            background: linear-gradient(135deg, #2E8B57, #3CB371);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(46, 139, 87, 0.3);
+        }
+
+        .meal-plan-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .meal-plan-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .meal-icon {
+            font-size: 2em;
+        }
+
+        .vote-count {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .selected .vote-count {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .meal-details {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .meal-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .feature-tag {
+            background: rgba(46, 139, 87, 0.1);
+            color: #2E8B57;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .selected .feature-tag {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .vote-btn {
+            background: linear-gradient(135deg, #2E8B57, #3CB371);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 30px 0;
+            box-shadow: 0 8px 20px rgba(46, 139, 87, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vote-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(46, 139, 87, 0.4);
+        }
+
+        .vote-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .results-section {
+            margin-top: 50px;
+            padding-top: 50px;
+            border-top: 3px solid #e9ecef;
+        }
+
+        .results-title {
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: #1e3c72;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .result-bar {
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .result-fill {
+            height: 70px;
+            background: linear-gradient(135deg, #2E8B57, #3CB371);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: width 0.8s ease;
+            min-width: 150px;
+        }
+
+        .total-votes {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 1.3em;
+            color: #1e3c72;
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 30px;
+            }
+            
+            .meal-plan-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .meal-features {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 WIAWSO COLLEGE</h1>
+            <p>Student Meal Plan Preference Survey 2025</p>
+        </div>
+        
+        <div class="content">
+            <div class="intro-section">
+                <h2>📋 Help Us Choose the Best Meal Plan!</h2>
+                <p>Your voice matters! Vote for your preferred meal plan option to help the administration make the best decision for all Wiawso students. Each option has different benefits - choose what works best for you.</p>
+            </div>
+
+            <div id="voterIdSection" class="voter-id-section">
+                <h3>🔐 Student Verification</h3>
+                <p>Please enter your Student ID to participate in the meal plan survey:</p>
+                <input type="text" id="studentId" placeholder="Enter your Student ID (e.g., WIA2025001)" maxlength="20">
+                <button class="verify-btn" onclick="verifyVoter()">🚀 Verify & Vote</button>
+            </div>
+
+            <div id="votingArea" style="display: none;">
+                <div class="voting-section">
+                    <h2 style="text-align: center; color: #1e3c72; margin-bottom: 30px; font-size: 1.8em;">
+                        🍽 Select Your Preferred Meal Plan
+                    </h2>
+                    
+                    <div id="mealPlans">
+                        <!-- Meal plans will be populated by JavaScript -->
+                    </div>
+                    
+                    <center>
+                        <button class="vote-btn" id="voteButton" onclick="castVote()" disabled>
+                            🗳 Submit My Vote
+                        </button>
+                    </center>
+                    
+                    <div id="successMessage" style="display: none;" class="success-message">
+                        ✅ Thank you! Your meal plan preference has been recorded successfully. Your feedback will help improve student life at Wiawso College.
+                    </div>
+                </div>
+
+                <div class="results-section">
+                    <h2 class="results-title">📊 Live Survey Results</h2>
+                    <div id="results">
+                        <!-- Results will be populated by JavaScript -->
+                    </div>
+                    <div class="total-votes" id="totalVotes">
+                        <strong>Total Student Responses: 0</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Meal plan options
+        let mealPlans = [
+            { 
+                id: 1, 
+                title: "Three Meals + No Allowance", 
+                icon: "🍽",
+                description: "Complete meal coverage with breakfast, lunch, and dinner provided daily at the college dining hall.",
+                features: ["Breakfast included", "Lunch included", "Dinner included", "No cash allowance", "Nutritionally balanced"],
+                votes: 0 
+            },
+            { 
+                id: 2, 
+                title: "Two Meals + 100 Cedis Allowance", 
+                icon: "🥘",
+                description: "Two meals per day (lunch and dinner) plus 100 Cedis monthly allowance for breakfast or snacks.",
+                features: ["Lunch included", "Dinner included", "100 Cedis monthly", "Breakfast flexibility", "Mixed option"],
+                votes: 0 
+            },
+            { 
+                id: 3, 
+                title: "No Meals + Full Allowance", 
+                icon: "💰",
+                description: "Complete financial allowance to purchase all your meals independently with maximum flexibility.",
+                features: ["Full cash allowance", "Maximum flexibility", "Choose your own food", "Budget management", "Independence"],
+                votes: 0 
+            }
+        ];
+
+        let selectedPlan = null;
+        let hasVoted = false;
+        let totalVotes = 0;
+        let verifiedVoters = new Set();
+
+        function verifyVoter() {
+            const studentId = document.getElementById('studentId').value.trim();
+            
+            if (!studentId) {
+                alert('⚠ Please enter your Student ID to continue');
+                return;
+            }
+
+            if (studentId.length < 5) {
+                alert('⚠ Please enter a valid Student ID');
+                return;
+            }
+
+            if (verifiedVoters.has(studentId)) {
+                alert('⚠ This Student ID has already participated. Each student can only vote once.');
+                return;
+            }
+
+            // Store the verified voter
+            verifiedVoters.add(studentId);
+            
+            // Hide voter ID section and show voting area
+            document.getElementById('voterIdSection').style.display = 'none';
+            document.getElementById('votingArea').style.display = 'block';
+            
+            // Initialize the voting interface
+            renderMealPlans();
+            renderResults();
+        }
+
+        function renderMealPlans() {
+            const plansContainer = document.getElementById('mealPlans');
+            plansContainer.innerHTML = '';
+
+            mealPlans.forEach(plan => {
+                const planDiv = document.createElement('div');
+                planDiv.className = 'meal-plan';
+                planDiv.onclick = () => selectPlan(plan.id);
+                
+                const featuresHTML = plan.features.map(feature => 
+                    <span class="feature-tag">${feature}</span>
+                ).join('');
+                
+                planDiv.innerHTML = `
+                    <div class="meal-plan-header">
+                        <div class="meal-plan-title">
+                            <span class="meal-icon">${plan.icon}</span>
+                            <span>${plan.title}</span>
+                        </div>
+                        <div class="vote-count">${plan.votes} votes</div>
+                    </div>
+                    <div class="meal-details">${plan.description}</div>
+                    <div class="meal-features">${featuresHTML}</div>
+                `;
+                
+                plansContainer.appendChild(planDiv);
+            });
+        }
+
+        function selectPlan(planId) {
+            if (hasVoted) return;
+            
+            selectedPlan = planId;
+            
+            // Update UI to show selection
+            const planElements = document.querySelectorAll('.meal-plan');
+            planElements.forEach((element, index) => {
+                if (mealPlans[index].id === planId) {
+                    element.classList.add('selected');
+                } else {
+                    element.classList.remove('selected');
+                }
+            });
+            
+            // Enable vote button
+            document.getElementById('voteButton').disabled = false;
+        }
+
+        function castVote() {
+            if (!selectedPlan || hasVoted) return;
+            
+            // Find and update the selected plan's vote count
+            const plan = mealPlans.find(p => p.id === selectedPlan);
+            if (plan) {
+                plan.votes++;
+                totalVotes++;
+                hasVoted = true;
+                
+                // Show success message
+                document.getElementById('successMessage').style.display = 'block';
+                
+                // Disable voting
+                document.getElementById('voteButton').disabled = true;
+                document.getElementById('voteButton').innerHTML = '✅ Vote Submitted';
+                
+                // Update displays
+                renderMealPlans();
+                renderResults();
+                
+                // Scroll to results
+                document.querySelector('.results-section').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+            }
+        }
+
+        function renderResults() {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
+            
+            // Sort plans by votes (descending)
+            const sortedPlans = [...mealPlans].sort((a, b) => b.votes - a.votes);
+            
+            sortedPlans.forEach(plan => {
+                const percentage = totalVotes > 0 ? (plan.votes / totalVotes * 100) : 0;
+                
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'result-bar';
+                
+                resultDiv.innerHTML = `
+                    <div class="result-fill" style="width: ${percentage}%">
+                        <span>${plan.icon} ${plan.title}</span>
+                        <span>${plan.votes} votes (${percentage.toFixed(1)}%)</span>
+                    </div>
+                `;
+                
+                resultsContainer.appendChild(resultDiv);
+            });
+            
+            // Update total votes display
+            document.getElementById('totalVotes').innerHTML = 
+                <strong>Total Student Responses: ${totalVotes}</strong>;
+        }
+
+        // Initialize the display
+        renderMealPlans();
+        renderResults();
+    </script>
+</body>
+</html>
